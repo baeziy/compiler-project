@@ -30,7 +30,7 @@ char precedence[6][6] = {
     {'<', '<', '<', '<', '<', ' '}
 };
 
-float id_values[MAX_TOKENS];
+int id_values[MAX_TOKENS];
 char id_names[MAX_TOKENS];
 int id_count = 0;
 char *ch;
