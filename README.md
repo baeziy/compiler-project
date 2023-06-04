@@ -1,4 +1,4 @@
-# COMP 451 Section X - Spring 2023 Semester Project
+# COMP 451 Section A - Spring 2023 Semester Project
 
 This project includes two key components: the lexer (`lex.c`) and the parser (`parser.c`). These are fundamental components in a compiler pipeline, handling lexical analysis and syntax analysis, respectively. 
 
