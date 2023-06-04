@@ -46,12 +46,12 @@ int main(int argc, char ** argv){
             }
 
             // Check if character is an operand (lower-case alphabet)
-            else if (isOperand(ch)) {
+            else if (isOperand(&ch)) {
                 printf("Operand found: %c\n", ch);
             }
 
             // Check if character is an operator (+, -, *, /)
-            else if(isOperator(ch)){
+            else if(isOperator(&ch)){
                 printf("Operator found: %c\n", ch);
             }
 
