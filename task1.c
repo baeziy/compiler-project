@@ -36,7 +36,7 @@ int main(int argc, char ** argv){
 
         int sen = 0;
         // looping over all characters in input string
-        for (int i = 0, sen = 0, opCount = 0; i < strlen(input); i++) {
+        for (int i = 0, opCount = 0; i < strlen(input); i++) {
             char ch = input[i];
 
             // checking if sentinal character is found
@@ -72,7 +72,7 @@ int main(int argc, char ** argv){
 
         if(!sen)
             printf("Sentinal character not found for: %s %d\n", input, sen);
-
+        sen = 0;
 
     }
 
