@@ -36,7 +36,7 @@ int main(int argc, char ** argv){
 
         int sen = 0;
         // looping over all characters in input string
-        for (int i = 0, sen = 0; i < strlen(input); i++) {
+        for (int i = 0, sen = 0, opCount = 0; i < strlen(input); i++) {
             char ch = input[i];
 
             // checking if sentinal character is found
@@ -47,7 +47,14 @@ int main(int argc, char ** argv){
 
             // Check if character is an operand (lower-case alphabet)
             else if (isOperand(&ch)) {
+                opCount++;
+                if(opCount > 5){
+                    printf("More than 5 operands found. Program terminated prematurely.\n");
+                    return 1;
+                }
+                else
                 printf("Operand found: %c\n", ch);
+                
             }
 
             // Check if character is an operator (+, -, *, /)
