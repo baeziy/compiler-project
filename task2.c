@@ -45,16 +45,6 @@ int get_index(char ch) {
     }
 }
 
-void evaluate(char op, int *stack, int *top) {
-    int b = stack[(*top)--];
-    int a = stack[(*top)--];
-    switch (op) {
-        case '+': stack[++(*top)] = a + b; break;
-        case '-': stack[++(*top)] = a - b; break;
-        case '*': stack[++(*top)] = a * b; break;
-        case '/': stack[++(*top)] = a / b; break;
-    }
-}
 float res = 0.0;
 void foo(int stackI, int chI, int* top, char* stack, char* ch, char* tempStack, int* tempTop){
     switch(precedence[stackI][chI]){
@@ -69,19 +59,29 @@ void foo(int stackI, int chI, int* top, char* stack, char* ch, char* tempStack, 
             if(isOperand(tempStack[*tempTop]) && (*tempTop > 1)){
                 switch(tempStack[*tempTop]){
                     case '+':
-                        res += (tempStack[*tempTop - 2] - '0') + (tempStack[*tempTop - 1] - '0');
+                        res += id_values[((tempStack[*tempTop - 2]) - 'a')] + id_values[((tempStack[*tempTop - 1]) - 'a')];
                         break;
                     case '-':
-                        res += (tempStack[*tempTop - 2] - '0') - (tempStack[*tempTop - 1] - '0');
+                        res -= id_values[((tempStack[*tempTop - 2]) - 'a')] - id_values[((tempStack[*tempTop - 1]) - 'a')];
                         break;
                     case '*':
-                        res += (tempStack[*tempTop - 2] - '0') * (tempStack[*tempTop - 1] - '0');
+                        if(res == 0.0)
+                            res = 1;
+                        res *= id_values[((tempStack[*tempTop - 2]) - 'a')] * id_values[((tempStack[*tempTop - 1]) - 'a')];
                         break;
                     case '/':
-                        res += (float)(tempStack[*tempTop - 2] - '0') / (tempStack[*tempTop - 1] - '0');
+                        if(res == 0.0)
+                            res = (float)(id_values[((tempStack[*tempTop - 2]) - 'a')]) / id_values[((tempStack[*tempTop - 1]) - 'a')];
+                        else
+                            res /= (float)(id_values[((tempStack[*tempTop - 2]) - 'a')]) / id_values[((tempStack[*tempTop - 1]) - 'a')];
                         break;
                 }
+                tempStack[*(tempTop - 2)] = ' ';
+                tempStack[*(tempTop - 1)] = ' ';
+                tempStack[*(tempTop)] = ' ';
+                *tempTop -= 3;
             }
+
             break;
         default:
             printf("Rejected\n");
@@ -91,37 +91,20 @@ void foo(int stackI, int chI, int* top, char* stack, char* ch, char* tempStack, 
 void parse(const char *str) {
     char *stack = (char *) malloc(sizeof(char) * 10);
     stack[0] = '$';
-    char *tempStack = (char *) malloc(sizeof(char) * 10);
     int top = 0;
+    char *tempStack = (char *) malloc(sizeof(char) * 10);
+    int tempTop = 0;
     char *ch = str;
     printf("Stack\t\t\tInput\t\t\tAction\n");
-    while (*ch != '$' || stack[top] != '$') {
+    while (*ch != '$' && stack[top] != '$') {
         
         int stackIndex = get_index(stack[top]);
         int nextInputIndex = get_index(*ch);
 
-
-
-        
-
-
-
-        int stackTop = get_index(stack[top] == 'i' ? 'i' : stack[top]);
-        int nextInput = get_index(*ch);
-        if (precedence[stackTop][nextInput] == '<' || precedence[stackTop][nextInput] == '=') {
-            printf("%s\t\t\t%s\t\t\tPush\n", stack, ch);
-            stack[++top] = *(ch++);
-        } else if (precedence[stackTop][nextInput] == '>') {
-            printf("%s\t\t\t%s\t\t\tPop\n", stack, ch);
-            if (stack[top] == 'i') stack[top] = id_values[*(--ch) - 'a'];
-            else evaluate(stack[top--], stack, &top);
-        } else {
-            printf("Rejected\n");
-            return;
-        }
+        foo(stackIndex, nextInputIndex, &top, stack, ch, tempStack, &tempTop);
     }
     printf("%s\t\t\t%s\t\t\tAccepted\n", stack, ch);
-    printf("The output of the given expression is: %d\n", stack[top]);
+    printf("The output of the given expression is: %d\n", res);
 }
 
 int main(int argc, char ** argv){
@@ -188,7 +171,7 @@ int main(int argc, char ** argv){
         printf("Number of operands found: %d\n", id_count);
         for(int i = 0; i < id_count; ++i){
             printf("Enter value for %c: ", id_names[i]);
-            scanf("%d", &id_values[i]);
+            scanf("%d", &id_values[id_names[i] - 'a']);
         }
 
         parse(input);
