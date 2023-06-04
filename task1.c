@@ -31,15 +31,17 @@ int main(int argc, char ** argv){
         // input has whole string
         char *input = argv[i];
 
-        printf("Program finds following tokens in the expression:\n");
+        printf("\n***Program finds following tokens in the expression:***\n");
         printf("Expression received: %s\n", input);
 
+        int sen = 0;
         // looping over all characters in input string
-        for (int i = 0; i < strlen(input); i++) {
+        for (int i = 0, sen = 0; i < strlen(input); i++) {
             char ch = input[i];
 
             // checking if sentinal character is found
-            if (ch == '#') {
+            if (ch == '$') {
+                sen = 1;
                 break;
             }
 
@@ -60,6 +62,8 @@ int main(int argc, char ** argv){
             }
 
         }
+
+        printf("Sentinal character not found for: %s\n", input);
 
 
     }
