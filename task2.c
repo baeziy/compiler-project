@@ -33,7 +33,7 @@ char precedence[6][6] = {
 int id_values[MAX_TOKENS];
 char id_names[MAX_TOKENS];
 int id_count = 0;
-
+char *ch;
 int get_index(char ch) {
     switch (ch) {
         case '+': return 1;
@@ -46,40 +46,41 @@ int get_index(char ch) {
 }
 
 float res = 0.0;
-void foo(int stackI, int chI, int* top, char* stack, char* ch, char* tempStack, int* tempTop){
+void foo(int stackI, int chI, int* top, char* stack, char* tempStack, int* tempTop){
     switch(precedence[stackI][chI]){
         case '<':
             stack[++(*top)] = *(ch++);
-            printf("%s\t\t\t%s\t\t\tPush\n", stack, ch);
+            printf("\t%s\t\t\t%s\t\t\tPush\n", stack, ch);
             break;
         case '>':
-            tempStack[++(*tempTop)] = stack[(*top)];
-            stack[(*top)--] = ' ';
-            printf("%s\t\t\t%s\t\t\tPop\n", stack, ch);
-            if(isOperand(&tempStack[*tempTop]) && (*tempTop > 1)){
-                switch(tempStack[*tempTop]){
+            tempStack[(*tempTop)] = stack[(*top)];
+            *tempTop += 1;
+            stack[*top] = ' ';
+            *top -= 1;
+            printf("\t%s\t\t\t%s\t\t\tPop\n", stack, ch);
+            int is = isOperator(&tempStack[*tempTop-1]);
+            if((is) && (*tempTop > 1)){
+                switch(tempStack[*tempTop-1]){
                     case '+':
-                        res += id_values[((tempStack[*tempTop - 2]) - 'a')] + id_values[((tempStack[*tempTop - 1]) - 'a')];
+                        res = id_values[((tempStack[*tempTop - 3]) - 'a')] + id_values[((tempStack[*tempTop - 2]) - 'a')];
+                        id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                     case '-':
-                        res -= id_values[((tempStack[*tempTop - 2]) - 'a')] - id_values[((tempStack[*tempTop - 1]) - 'a')];
+                        res = id_values[((tempStack[*tempTop - 3]) - 'a')] - id_values[((tempStack[*tempTop - 2]) - 'a')];
+                        id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                     case '*':
-                        if(res == 0.0)
-                            res = 1;
-                        res *= id_values[((tempStack[*tempTop - 2]) - 'a')] * id_values[((tempStack[*tempTop - 1]) - 'a')];
+                        res = id_values[((tempStack[*tempTop - 3]) - 'a')] * id_values[((tempStack[*tempTop - 2]) - 'a')];
+                        id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                     case '/':
-                        if(res == 0.0)
-                            res = (float)(id_values[((tempStack[*tempTop - 2]) - 'a')]) / id_values[((tempStack[*tempTop - 1]) - 'a')];
-                        else
-                            res /= (float)(id_values[((tempStack[*tempTop - 2]) - 'a')]) / id_values[((tempStack[*tempTop - 1]) - 'a')];
+                            res = (float)(id_values[((tempStack[*tempTop - 3]) - 'a')]) / id_values[((tempStack[*tempTop - 2]) - 'a')];
+                        id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                 }
-                tempStack[*(tempTop - 2)] = ' ';
-                tempStack[*(tempTop - 1)] = ' ';
-                tempStack[*(tempTop)] = ' ';
-                *tempTop -= 3;
+                tempStack[*(tempTop) - 2] = ' ';
+                tempStack[*(tempTop) - 1] = ' ';
+                *tempTop -= 2;
             }
 
             break;
@@ -94,17 +95,18 @@ void parse(char *str) {
     int top = 0;
     char *tempStack = (char *) malloc(sizeof(char) * 10);
     int tempTop = 0;
-    char *ch = str;
+    ch = str;
     printf("Stack\t\t\tInput\t\t\tAction\n");
-    while (*ch != '$' && stack[top] != '$') {
+    printf("\t%s\t\t\t%s\t\t\t\n", stack, ch);
+    while (*ch != '$' || stack[top] != '$') {
         
         int stackIndex = get_index(stack[top]);
         int nextInputIndex = get_index(*ch);
 
-        foo(stackIndex, nextInputIndex, &top, stack, ch, tempStack, &tempTop);
+        foo(stackIndex, nextInputIndex, &top, stack, tempStack, &tempTop);
     }
     printf("%s\t\t\t%s\t\t\tAccepted\n", stack, ch);
-    printf("The output of the given expression is: %d\n", res);
+    printf("The output of the given expression is: %f\n", res);
 }
 
 int main(int argc, char ** argv){
@@ -143,7 +145,7 @@ int main(int argc, char ** argv){
                     return 1;
                 }
                 else{
-                    id_names[id_count] = ch;
+                    id_names[id_count++] = ch;
                 }
                 
                 
