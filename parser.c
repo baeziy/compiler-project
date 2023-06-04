@@ -104,7 +104,7 @@ void parse(char *str) {
     char *tempStack = (char *) malloc(sizeof(char) * 10);
     int tempTop = 0;
     ch = str;
-    printf("Stack\t\t\tInput\t\t\tAction\n");
+    printf("\tStack\t\t\tInput\t\t\tAction\n");
     printf("\t%s\t\t\t%s\t\t\t\n", stack, ch);
 
     // checking if sentinal character is found in both stack and input
