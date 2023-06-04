@@ -88,18 +88,20 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     char *ch = argv[1];
-    while (*ch) {
-        if (isalpha(*ch)) {
-            id_names[id_count++] = *(ch++);
-            *ch = 'i';
+
+    for(int i = 0; i < strlen(ch); i++){
+        if(isalpha(ch[i])){
+            id_names[id_count++] = ch[i];
         }
-        ch++;
     }
+
     printf("Enter integer values of the following identifiers:\n");
     for (int i = 0; i < id_count; i++) {
         printf("Value of %c: ", id_names[i]);
-        scanf("%d", &id_values[id_names[i] - 'a']);
+        scanf("%d", &id_values[i]);
     }
-    parse(argv[1]);
+
+    parse(ch);
+    
     return 0;
 }
