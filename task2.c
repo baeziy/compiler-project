@@ -48,37 +48,44 @@ int get_index(char ch) {
 float res = 0.0;
 void foo(int stackI, int chI, int* top, char* stack, char* tempStack, int* tempTop){
     switch(precedence[stackI][chI]){
+        // stackI < chI
         case '<':
             stack[++(*top)] = *(ch++);
             printf("\t%s\t\t\t%s\t\t\tPush\n", stack, ch);
             break;
+        // stackI > chI
         case '>':
             tempStack[(*tempTop)] = stack[(*top)];
             *tempTop += 1;
             stack[*top] = ' ';
             *top -= 1;
             printf("\t%s\t\t\t%s\t\t\tPop\n", stack, ch);
-            int is = isOperator(&tempStack[*tempTop-1]);
-            if((is) && (*tempTop > 1)){
+
+            // if an operator is found, perform operation on top 2 operands
+            if(isOperator(&tempStack[*tempTop-1]) && (*tempTop > 1)){
                 switch(tempStack[*tempTop-1]){
                     case '+':
+                    // add top 2 operands and store result in first operand + res
                         res = id_values[((tempStack[*tempTop - 3]) - 'a')] + id_values[((tempStack[*tempTop - 2]) - 'a')];
                         id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                     case '-':
+                    // subtract top 2 operands and store result in first operand + res
                         res = id_values[((tempStack[*tempTop - 3]) - 'a')] - id_values[((tempStack[*tempTop - 2]) - 'a')];
                         id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                     case '*':
+                    // multiply top 2 operands and store result in first operand + res
                         res = id_values[((tempStack[*tempTop - 3]) - 'a')] * id_values[((tempStack[*tempTop - 2]) - 'a')];
                         id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                     case '/':
-                            res = (float)id_values[((tempStack[*tempTop - 3]) - 'a')] / id_values[((tempStack[*tempTop - 2]) - 'a')];
-
+                    // divide top 2 operands and store result in first operand + res
+                        res = (float)id_values[((tempStack[*tempTop - 3]) - 'a')] / id_values[((tempStack[*tempTop - 2]) - 'a')];
                         id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                 }
+                // remove top 2 operands from stack and replace with first operand
                 tempStack[*(tempTop) - 2] = ' ';
                 tempStack[*(tempTop) - 1] = ' ';
                 *tempTop -= 2;
@@ -99,14 +106,17 @@ void parse(char *str) {
     ch = str;
     printf("Stack\t\t\tInput\t\t\tAction\n");
     printf("\t%s\t\t\t%s\t\t\t\n", stack, ch);
+
+    // checking if sentinal character is found in both stack and input
     while (*ch != '$' || stack[top] != '$') {
         
         int stackIndex = get_index(stack[top]);
         int nextInputIndex = get_index(*ch);
 
+        // foo() will print the action taken and update the stack and input + res
         foo(stackIndex, nextInputIndex, &top, stack, tempStack, &tempTop);
     }
-    printf("%s\t\t\t%s\t\t\tAccepted\n", stack, ch);
+    printf("\t%s\t\t\t%s\t\t\tAccepted\n", stack, ch);
     printf("The output of the given expression is: %f\n", res);
 }
 
@@ -170,21 +180,24 @@ int main(int argc, char ** argv){
             return 1;
         }
         
-
+        // getting values for operands
         printf("Number of operands found: %d\n", id_count);
         for(int i = 0; i < id_count; ++i){
             printf("Enter value for %c: ", id_names[i]);
             scanf("%f", &id_values[id_names[i] - 'a']);
         }
 
+        // parsing the input string
         parse(input);
 
+        // resetting values for next input string
         sen = 0;
     }
 
     return 0;
 }
 
+// function definitions
 int isOperand(const char* ch){
     return (*ch >= 'a' && *ch <= 'z');
 }
