@@ -88,7 +88,7 @@ void foo(int stackI, int chI, int* top, char* stack, char* ch, char* tempStack, 
             exit(1);
     }
 }
-void parse(const char *str) {
+void parse(char *str) {
     char *stack = (char *) malloc(sizeof(char) * 10);
     stack[0] = '$';
     int top = 0;
