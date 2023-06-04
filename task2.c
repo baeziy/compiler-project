@@ -56,7 +56,7 @@ void foo(int stackI, int chI, int* top, char* stack, char* ch, char* tempStack, 
             tempStack[++(*tempTop)] = stack[(*top)];
             stack[(*top)--] = ' ';
             printf("%s\t\t\t%s\t\t\tPop\n", stack, ch);
-            if(isOperand(tempStack[*tempTop]) && (*tempTop > 1)){
+            if(isOperand(&tempStack[*tempTop]) && (*tempTop > 1)){
                 switch(tempStack[*tempTop]){
                     case '+':
                         res += id_values[((tempStack[*tempTop - 2]) - 'a')] + id_values[((tempStack[*tempTop - 1]) - 'a')];
