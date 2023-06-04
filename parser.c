@@ -192,6 +192,11 @@ int main(int argc, char ** argv){
 
         // resetting values for next input string
         sen = 0;
+        id_count = 0;
+        for(int i = 0; i < MAX_TOKENS; ++i){
+            id_values[i] = 0.0;
+            id_names[i] = ' ';
+        }
     }
 
     return 0;
