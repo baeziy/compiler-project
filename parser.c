@@ -16,7 +16,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#define MAX_TOKENS 10
+#define MAX_TOKENS 30
 
 int isOperand(const char*);
 int isOperator(const char*);
