@@ -70,7 +70,8 @@ int main(int argc, char ** argv){
 
         }
 
-        printf("Sentinal character not found for: %s\n", input);
+        if(!sen)
+            printf("Sentinal character not found for: %s\n", input);
 
 
     }
