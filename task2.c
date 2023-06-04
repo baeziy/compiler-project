@@ -30,7 +30,7 @@ char precedence[6][6] = {
     {'<', '<', '<', '<', '<', ' '}
 };
 
-int id_values[MAX_TOKENS];
+float id_values[MAX_TOKENS];
 char id_names[MAX_TOKENS];
 int id_count = 0;
 char *ch;
@@ -174,7 +174,7 @@ int main(int argc, char ** argv){
         printf("Number of operands found: %d\n", id_count);
         for(int i = 0; i < id_count; ++i){
             printf("Enter value for %c: ", id_names[i]);
-            scanf("%d", &id_values[id_names[i] - 'a']);
+            scanf("%f", &id_values[id_names[i] - 'a']);
         }
 
         parse(input);
