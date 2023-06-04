@@ -30,7 +30,7 @@ char precedence[6][6] = {
     {'<', '<', '<', '<', '<', ' '}
 };
 
-int id_values[MAX_TOKENS];
+float id_values[MAX_TOKENS];
 char id_names[MAX_TOKENS];
 int id_count = 0;
 char *ch;
@@ -74,7 +74,8 @@ void foo(int stackI, int chI, int* top, char* stack, char* tempStack, int* tempT
                         id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                     case '/':
-                            res = (float)(id_values[((tempStack[*tempTop - 3]) - 'a')]) / id_values[((tempStack[*tempTop - 2]) - 'a')];
+                            res = (float)id_values[((tempStack[*tempTop - 3]) - 'a')] / id_values[((tempStack[*tempTop - 2]) - 'a')];
+
                         id_values[((tempStack[*tempTop - 3]) - 'a')] = res;
                         break;
                 }
