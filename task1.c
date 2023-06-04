@@ -74,8 +74,8 @@ int main(int argc, char ** argv){
 }
 
 int isOperand(const char* ch){
-    return (ch >= 'a' && ch <= 'z');
+    return (*ch >= 'a' && *ch <= 'z');
 }
 int isOperator(const char* ch){
-    return (ch == '+' || ch == '-' || ch == '*' || ch == '/');
+    return (*ch == '+' || *ch == '-' || *ch == '*' || *ch == '/');
 }
